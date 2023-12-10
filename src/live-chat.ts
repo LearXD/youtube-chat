@@ -1,5 +1,4 @@
 import { EventEmitter } from "events"
-import TypedEmitter from "typed-emitter"
 import { ChatItem, YoutubeId } from "./types/data"
 import { FetchOptions } from "./types/yt-response"
 import { fetchChat, fetchLivePage } from "./requests"
@@ -14,10 +13,11 @@ type LiveChatEvents = {
 /**
  * YouTubeライブチャット取得イベント
  */
-export class LiveChat extends (EventEmitter as new () => TypedEmitter<LiveChatEvents>) {
+export class LiveChat extends EventEmitter {
   liveId?: string
   #observer?: NodeJS.Timer
   #options?: FetchOptions
+  #paused?: boolean = false;
   readonly #interval: number = 1000
   readonly #id: YoutubeId
 
@@ -33,6 +33,19 @@ export class LiveChat extends (EventEmitter as new () => TypedEmitter<LiveChatEv
     this.#interval = interval
   }
 
+  async pause() {
+    if (!this.#paused) {
+      this.#paused = true
+    }
+
+  }
+
+  async resume() {
+    if (this.#paused) {
+      this.#paused = false
+    }
+  }
+
   async start(): Promise<boolean> {
     if (this.#observer) {
       return false
@@ -42,7 +55,7 @@ export class LiveChat extends (EventEmitter as new () => TypedEmitter<LiveChatEv
       this.liveId = options.liveId
       this.#options = options
 
-      this.#observer = setInterval(() => this.#execute(), this.#interval)
+      this.#observer = setInterval(() => this.#paused && this.#execute(), this.#interval)
 
       this.emit("start", this.liveId)
       return true
