@@ -55,7 +55,7 @@ export class LiveChat extends EventEmitter {
       this.liveId = options.liveId
       this.#options = options
 
-      this.#observer = setInterval(() => this.#paused && this.#execute(), this.#interval)
+      this.#observer = setInterval(() => !this.#paused && this.#execute(), this.#interval)
 
       this.emit("start", this.liveId)
       return true
