@@ -45,6 +45,10 @@ export class LiveChat extends EventEmitter {
       this.#paused = false
     }
   }
+  
+  async isPaused() {
+	return this.#paused;
+  }
 
   async start(): Promise<boolean> {
     if (this.#observer) {
