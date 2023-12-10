@@ -10,6 +10,7 @@ export declare class LiveChat extends EventEmitter {
     constructor(id: YoutubeId, interval?: number);
     pause(): Promise<void>;
     resume(): Promise<void>;
+    isPaused(): Promise<boolean | undefined>;
     start(): Promise<boolean>;
     stop(reason?: string): void;
 }

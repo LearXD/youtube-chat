@@ -59,6 +59,11 @@ class LiveChat extends events_1.EventEmitter {
             }
         });
     }
+    isPaused() {
+        return __awaiter(this, void 0, void 0, function* () {
+            return __classPrivateFieldGet(this, _LiveChat_paused, "f");
+        });
+    }
     start() {
         return __awaiter(this, void 0, void 0, function* () {
             if (__classPrivateFieldGet(this, _LiveChat_observer, "f")) {
@@ -68,7 +73,7 @@ class LiveChat extends events_1.EventEmitter {
                 const options = yield (0, requests_1.fetchLivePage)(__classPrivateFieldGet(this, _LiveChat_id, "f"));
                 this.liveId = options.liveId;
                 __classPrivateFieldSet(this, _LiveChat_options, options, "f");
-                __classPrivateFieldSet(this, _LiveChat_observer, setInterval(() => __classPrivateFieldGet(this, _LiveChat_paused, "f") && __classPrivateFieldGet(this, _LiveChat_instances, "m", _LiveChat_execute).call(this), __classPrivateFieldGet(this, _LiveChat_interval, "f")), "f");
+                __classPrivateFieldSet(this, _LiveChat_observer, setInterval(() => !__classPrivateFieldGet(this, _LiveChat_paused, "f") && __classPrivateFieldGet(this, _LiveChat_instances, "m", _LiveChat_execute).call(this), __classPrivateFieldGet(this, _LiveChat_interval, "f")), "f");
                 this.emit("start", this.liveId);
                 return true;
             }
